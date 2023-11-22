@@ -1,0 +1,25 @@
+{
+    "admin":[
+        "halaqah.temporary_teacher.add",
+        "halaqah.temporary_teacher.remove",
+        "halaqah.permanent_teacher.add",
+        "halaqah.permanent_teacher.remove",
+        "halaqah.permanent_teacher.remove",
+        "halaqah.permanent_teacher.remove",
+        "halaqah.tasmii.mark"
+
+    ],
+    "permanent_teacher":[
+        "halaqah.tasmii.mark",
+        "halaqah.pending_mark.list",
+        "halaqah.absences.list"
+    ],
+    "temporary_teacher":[
+        "halaqah.tasmii.mark",
+        "halaqah.pending_mark.list"
+    ],
+
+    "student":[
+        "halaqah.absences.add"
+    ]
+}

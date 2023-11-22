@@ -12,6 +12,9 @@ class UserSchema(Schema):
     lastname = fields.Str(required=True)
     email = fields.Email(required=True)
     is_admin = fields.Boolean(required=True)
+    birthdate = fields.Date(required=True)
+    address = fields.Str()
+
     classrooms = fields.List(fields.Nested(UserClassroomSchema), default=list())
     created_at = fields.DateTime()
 
@@ -22,7 +25,7 @@ class UserSchema(Schema):
 
 
 class User:
-    def __init__(self, id, firstname, lastname, email, is_admin, classrooms=[]):
+    def __init__(self, id, firstname, lastname, email, is_admin, birthdate, address, classrooms=[]):
         self.id = id
         self.firstname = firstname
         self.lastname = lastname
@@ -30,6 +33,7 @@ class User:
         self.email = email
         self.is_admain = is_admin
         self.classrooms = classrooms
-        
+        self.birthdate = birthdate
+        self.address = address
         self.created_at = datetime.now()
         self.last_update = datetime.now()

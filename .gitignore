@@ -1,2 +1,5 @@
 *.zip
 .DS_Store
+.vscode
+layers/python
+local_tests

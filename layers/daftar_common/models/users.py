@@ -25,7 +25,7 @@ class UserSchema(Schema):
 
 
 class User:
-    def __init__(self, id, firstname, lastname, email, is_admin, birthdate, address, classrooms=[]):
+    def __init__(self, id, firstname, lastname, email, is_admin, birthdate, address="", classrooms=[]):
         self.id = id
         self.firstname = firstname
         self.lastname = lastname

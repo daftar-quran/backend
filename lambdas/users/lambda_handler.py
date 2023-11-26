@@ -2,15 +2,17 @@ import json
 import os
 import boto3
 
-from daftar_common.models.users import User, UserSchema
+from daftar_common.models.users import UserSchema
+from daftar_common.http_response import HttpResponse
+from daftar_common.database_manager import TableManager
 
-from http_response import HttpResponse
 from marshmallow import ValidationError
 
 # Initialisation du client DynamoDB
 dynamodb = boto3.resource('dynamodb')
-table_name = os.environ['DYNAMODB_TABLE_NAME']
-table = dynamodb.Table(table_name)
+users_table_name = os.environ['DYNAMODB_USERS_TABLE_NAME']
+
+users_table = TableManager(table_name=users_table_name)
 
 
 def lambda_handler(event, context):
@@ -37,8 +39,12 @@ def lambda_handler(event, context):
         except ValidationError as err:
             return HttpResponse.bad_request(error=err.messages)
 
+        # Check that user does not exist
+        # TODO
+
+
         try:
-            table.put_item(Item=user_schema.dump(user))
+            users_table.add_item(item=user_schema.dump(user))
         except Exception as e:
             return HttpResponse.internal_error(error=f"Internal Server Error : {e}")
 

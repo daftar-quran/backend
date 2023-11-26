@@ -10,9 +10,10 @@ from marshmallow import ValidationError
 
 # Initialisation du client DynamoDB
 dynamodb = boto3.resource('dynamodb')
+
 users_table_name = os.environ['DYNAMODB_USERS_TABLE_NAME']
 
-users_table = TableManager(table_name=users_table_name)
+users_table = TableManager(dynamodb, table_name=users_table_name)
 
 
 def lambda_handler(event, context):

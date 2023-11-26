@@ -12,14 +12,9 @@ from daftar_common.helper_functions import datetime_to_string, replace_decimals
 class TableManager:
 
 
-    def __init__(self, table_name):
+    def __init__(self, dynamo_resource, table_name):
         
-        try:
-            region = os.environ["AWS_REGION"]
-        except IndexError:
-            raise ValueError("AWS_REGION environment variable not set.")
-
-        self.dynamo = boto3.resource('dynamodb', region)
+        self.dynamo = dynamo_resource
         self.table = self.dynamo.Table(table_name)
 
 

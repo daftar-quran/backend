@@ -2,9 +2,11 @@ from marshmallow import Schema, fields, post_load
 from datetime import datetime
 import uuid
 
+
 class UserClassroomSchema(Schema):
     id_classroom = fields.UUID()
     is_teacher = fields.Str()
+
 
 class UserSchema(Schema):
     id = fields.UUID(load_default=uuid.uuid4)
@@ -23,13 +25,12 @@ class UserSchema(Schema):
         return User(**data)
 
 
-
 class User:
     def __init__(self, id, firstname, lastname, email, is_admin, birthdate, address="", classrooms=[]):
         self.id = id
         self.firstname = firstname
         self.lastname = lastname
-        
+
         self.email = email
         self.is_admain = is_admin
         self.classrooms = classrooms
@@ -37,3 +38,4 @@ class User:
         self.address = address
         self.created_at = datetime.now()
         self.last_update = datetime.now()
+        self.

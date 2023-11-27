@@ -27,7 +27,6 @@ def replace_decimals(obj):
         return obj
 
 
-
 class CustomJsonEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, decimal.Decimal):
@@ -49,5 +48,3 @@ def string_to_date(str_date_object):
 
 def string_to_datetime(str_datetime_object):
     return datetime.strptime(str_datetime_object, DATE_TIME_FORMAT)
-
-

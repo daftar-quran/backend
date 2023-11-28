@@ -10,6 +10,7 @@ class UserClassroomSchema(Schema):
 
 class UserSchema(Schema):
     id = fields.UUID(load_default=uuid.uuid4)
+    pseudo = fields.Str(required=True)
     firstname = fields.Str(required=True)
     lastname = fields.Str(required=True)
     email = fields.Email(required=True)
@@ -26,8 +27,9 @@ class UserSchema(Schema):
 
 
 class User:
-    def __init__(self, id, firstname, lastname, email, is_admin, birthdate, address="", classrooms=[]):
+    def __init__(self, id, pseudo, firstname, lastname, email, password, is_admin, birthdate, address="", classrooms=[]):
         self.id = id
+        self.pseudo = pseudo
         self.firstname = firstname
         self.lastname = lastname
 
@@ -38,4 +40,4 @@ class User:
         self.address = address
         self.created_at = datetime.now()
         self.last_update = datetime.now()
-        self.
+

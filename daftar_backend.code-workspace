@@ -3,6 +3,12 @@
 		{
 			"path": "."
 		},
+		{
+			"path": "../terraform"
+		},
+		{
+			"path": "../daftar-source"
+		}
 	]
 
 }

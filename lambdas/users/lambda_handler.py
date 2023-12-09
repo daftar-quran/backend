@@ -3,7 +3,11 @@ import os
 import uuid
 import boto3
 import logging
-from marshmallow import ValidationError, fields, Schema, post_load
+
+from datetime import datetime
+from typing import List, Optional
+
+from pydantic import BaseModel, Field, EmailStr, ValidationError
 
 from daftar_common.models.users import User
 from daftar_common.http_response import HttpResponse
@@ -20,21 +24,17 @@ users_table = TableManager(dynamodb, table_name=users_table_name)
 logger = logging.getLogger(__name__)
 
 
-class UserSignupSchema(Schema):
-    id = fields.UUID(load_default=uuid.uuid4)
-    pseudo = fields.Str(required=True) # TODO: Do not allow special char, space etc.
-    firstname = fields.Str(required=True)
-    lastname = fields.Str(required=True)
-    password = fields.Str(required=True)
-    email = fields.Email(required=True)
-    is_admin = fields.Boolean(required=True)
-    birthdate = fields.Date(required=True)
-    address = fields.Str()
 
-    @post_load
-    def make_user(self, data, **kwargs):
-        return User(**data)
-
+class UserSignup(BaseModel):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4)
+    pseudo: str
+    firstname: str
+    lastname: str
+    email: EmailStr
+    password: str
+    is_admin: bool
+    birthdate: datetime.date
+    address: Optional[str] = ""
 
 
 def lambda_handler(event, context):
@@ -55,10 +55,12 @@ def lambda_handler(event, context):
 
         # Data Validation
         try:
-            user_schema = UserSignupSchema()
-            user = user_schema.load(payload)
+            user_signup = UserSignup(**payload)
         except ValidationError as err:
-            return HttpResponse.bad_request(error=err.messages)
+            return HttpResponse.bad_request(error=err.errors())
+        password = user_signup.password
+
+        user = User(**user_signup.model_dump(exclude=('password')))
 
         # Check that user does not exist
         # TODO
@@ -80,8 +82,8 @@ def lambda_handler(event, context):
             return HttpResponse.bad_request(error=f"User already exists and confirmed. : {resp_cognito}")
 
         try:
-            users_table.add_item(item=user_schema.dump(user))
+            users_table.add_item(item=user_signup.model_dump())
         except Exception as e:
             return HttpResponse.internal_error(error=f"Internal Server Error : {e}")
 
-        return HttpResponse.success(response_data=user_schema.dump(user))
+        return HttpResponse.success(response_data=user_signup.model_dump())

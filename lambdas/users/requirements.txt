@@ -1,0 +1,2 @@
+pydantic[email]==2.5.2
+git+https://github.com/daftar-quran/daftar_source.git

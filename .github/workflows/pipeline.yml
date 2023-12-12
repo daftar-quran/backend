@@ -1,0 +1,42 @@
+name: 'Daftar Quran'
+
+on:
+  push:
+    branches: [ "dev" ]
+  pull_request:
+    branches: [ "main" ]
+
+defaults:
+  run:
+    working-directory: ./infra
+    shell: bash
+
+permissions:
+  contents: read
+
+jobs:
+  daftar-source:
+    name: 'Prepare layer daftar source'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+#    - name: Test
+#      uses: actions/setup-python@v4
+#      with:
+#        python-version: '3.10'
+#      run: make test
+
+    - name: Install dependencies
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+      run: make install
+
+    - name: Publish
+      uses: vimtor/action-zip@v1.1
+      with:
+        files: daftar_common/ venv/lib/*/site-packages/
+        dest: result.zip

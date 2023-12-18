@@ -1,0 +1,61 @@
+name: 'Daftar Quran'
+
+on:
+  push:
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "main" ]
+
+defaults:
+  run:
+    shell: bash
+    working-directory: lambdas/users
+
+permissions:
+  contents: read
+
+jobs:
+  daftar-source:
+    name: 'Preparing layer daftar source'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      #    - name: Test
+      #      uses: actions/setup-python@v4
+      #      with:
+      #        python-version: '3.10'
+      #      run: make test
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install virtual env Python
+        run: python3 -m venv venv
+
+      - name: Install dependencies
+        run: make install
+
+      - name: Packaging artifact
+        uses: vimtor/action-zip@v1.1
+        with:
+          files: ./ venv/lib/*/site-packages/
+          dest: ./dist/${{github.sha}}.zip
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          role-duration-seconds: 1200
+          role-session-name: DaftarRunnerSession
+          role-skip-session-tagging: true
+      - name: Copy files to bucket
+        run: |
+          aws s3 cp ./dist/${{github.sha}}.zip s3://daftar-dev-lambda-artifact-bucket/lambdas/users/${{github.sha}}.zip

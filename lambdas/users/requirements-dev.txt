@@ -1,0 +1,9 @@
+black==22.12.0
+flake8==6.0.0
+isort==5.11.4
+psutil==5.9.4
+pylint==2.15.9
+pytest==7.2.0
+safety==2.3.5
+python-dotenv==1.0.0
+daftar_common @ git+https://github.com/daftar-quran/daftar_source.git

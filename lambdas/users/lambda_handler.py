@@ -10,7 +10,6 @@ from daftar_common.http_response import HttpResponse
 from daftar_common.database_manager import TableManager
 from daftar_common.cognito_idp import CognitoIdentityProviderWrapper
 
-
 # Initialisation du client DynamoDB
 dynamodb = boto3.resource("dynamodb")
 cognito_client = boto3.client('cognito-idp')
@@ -22,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 class UserSignupSchema(Schema):
     id = fields.UUID(load_default=uuid.uuid4)
-    pseudo = fields.Str(required=True) # TODO: Do not allow special char, space etc.
+    pseudo = fields.Str(required=True)  # TODO: Do not allow special char, space etc.
     firstname = fields.Str(required=True)
     lastname = fields.Str(required=True)
     password = fields.Str(required=True)
@@ -34,7 +33,6 @@ class UserSignupSchema(Schema):
     @post_load
     def make_user(self, data, **kwargs):
         return User(**data)
-
 
 
 def lambda_handler(event, context):
@@ -63,16 +61,16 @@ def lambda_handler(event, context):
         # Check that user does not exist
         # TODO
 
-
         cpw = CognitoIdentityProviderWrapper(
-            cognito_idp_client=cognito_client, 
-            user_pool_id="eu-west-1_p7iXXgN8f", 
+            cognito_idp_client=cognito_client,
+            user_pool_id="eu-west-1_p7iXXgN8f",
             client_id="rvkim25uu2nbvo5prfuucmfn5")
-        
+
         signup_confirmed = False
         resp_cognito = {}
         try:
-            resp_cognito, already_exists = cpw.sign_up_user(user_name=user.pseudo, password=payload['password'], user_email=user.email)
+            resp_cognito, already_exists = cpw.sign_up_user(user_name=user.pseudo, password=payload['password'],
+                                                            user_email=user.email)
         except Exception as e:
             return HttpResponse.internal_error(error=f"Internal Server Error : {e}")
 

@@ -9,7 +9,6 @@ on:
 defaults:
   run:
     shell: bash
-    working-directory: lambdas/users
 
 permissions:
   contents: read
@@ -43,7 +42,7 @@ jobs:
       - name: Packaging artifact
         uses: vimtor/action-zip@v1.1
         with:
-          files: . ./venv/lib/*/site-packages/
+          files: lambdas/users/* ./venv/lib/*/site-packages/
           dest: ./dist/${{github.sha}}.zip
 
       - name: Configure AWS credentials

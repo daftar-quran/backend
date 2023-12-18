@@ -43,7 +43,7 @@ jobs:
         uses: montudor/action-zip@v1
 
       - name: Packaging artifact
-        run: zip -qq -r ./dist/${{github.sha}}.zip lambdas/users venv/lib/*/site-packages
+        run: zip -qq -r ${{github.sha}}.zip lambdas/users venv/lib/*/site-packages
 #        with:
 #          files: lambdas/users venv/lib/*/site-packages
 #          dest: ./dist/${{github.sha}}.zip
@@ -61,4 +61,4 @@ jobs:
       - name: Copy files to bucket
         run: |
           ls -al |
-          aws s3 cp ./dist/${{github.sha}}.zip s3://daftar-dev-lambda-artifact-bucket/lambdas/users/${{github.sha}}.zip
+          aws s3 cp ${{github.sha}}.zip s3://daftar-dev-lambda-artifact-bucket/lambdas/users/${{github.sha}}.zip

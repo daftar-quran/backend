@@ -39,8 +39,10 @@ jobs:
       - name: Install dependencies
         run: make install
 
-      - name: Packaging artifact
+      - name: Install zip
         uses: montudor/action-zip@v1
+
+      - name: Packaging artifact
         run: zip -qq -r ./dist/${{github.sha}}.zip lambdas/users venv/lib/*/site-packages
 #        with:
 #          files: lambdas/users venv/lib/*/site-packages

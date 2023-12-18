@@ -43,7 +43,7 @@ jobs:
       - name: Packaging artifact
         uses: vimtor/action-zip@v1.1
         with:
-          files: ./ venv/lib/*/site-packages/
+          files: . venv/lib/*/site-packages/
           dest: ./dist/${{github.sha}}.zip
 
       - name: Configure AWS credentials
@@ -58,4 +58,5 @@ jobs:
           role-skip-session-tagging: true
       - name: Copy files to bucket
         run: |
+          ls -al |
           aws s3 cp ./dist/${{github.sha}}.zip s3://daftar-dev-lambda-artifact-bucket/lambdas/users/${{github.sha}}.zip

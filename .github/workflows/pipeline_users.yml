@@ -31,7 +31,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: '3.9'
 
       - name: Install virtual env Python
         run: python3 -m venv venv
@@ -43,7 +43,7 @@ jobs:
         uses: montudor/action-zip@v1
 
       - name: Packaging artifact
-        run: zip -qq -r ${{github.sha}}.zip lambdas/users venv/lib/*/site-packages
+        run: zip -qq -r ${{github.sha}}.zip lambdas/users
 #        with:
 #          files: lambdas/users venv/lib/*/site-packages
 #          dest: ./dist/${{github.sha}}.zip

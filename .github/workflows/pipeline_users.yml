@@ -43,7 +43,8 @@ jobs:
         uses: montudor/action-zip@v1
 
       - name: Packaging artifact
-        run: zip -qq -r ${{github.sha}}.zip lambdas/users
+        run: cd lambdas/users && zip -r ../../${{github.sha}}.zip .
+          
 #        with:
 #          files: lambdas/users venv/lib/*/site-packages
 #          dest: ./dist/${{github.sha}}.zip

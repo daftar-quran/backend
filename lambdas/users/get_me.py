@@ -18,6 +18,3 @@ def get_me(users_table, cognito_identity_wrapper, access_token):
     user = User(**user)
 
     return HttpResponse.success(response_data=user.model_dump(mode='json'))
-    
-
-

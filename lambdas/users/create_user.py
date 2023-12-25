@@ -2,7 +2,7 @@
 
 import json
 
-from typing import List, Optional
+from typing import Optional
 import uuid
 import datetime
 from daftar_common.models.users import User
@@ -19,7 +19,6 @@ class UserSignup(BaseModel):
     lastname: str
     email: EmailStr
     password: str
-    is_admin: bool
     birthdate: datetime.date
     address: Optional[str] = ""
 
@@ -55,7 +54,7 @@ def create_user(event, cognito_provider, users_table):
 
     if already_exists:
         return HttpResponse.bad_request(error=f"User already exists and confirmed. : {resp_cognito}")
-    print(resp_cognito)
+    # print(resp_cognito)
     is_unconfirmed = resp_cognito.get('UserStatus') == 'UNCONFIRMED'
     
     if is_unconfirmed:

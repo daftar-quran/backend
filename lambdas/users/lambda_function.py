@@ -74,7 +74,5 @@ def lambda_handler(event, context):
             result = delete_user_by_id(users_table, cognito_provider, id_user)
         except Exception as e:
             return HttpResponse.internal_error(error=f"Internal Server Error : {e}")
-    
-
 
     return result

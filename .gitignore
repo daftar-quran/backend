@@ -17,4 +17,5 @@ data/
 .pytest_cache
 htmlcov
 .coverage
-
+layers/python
+local_tests

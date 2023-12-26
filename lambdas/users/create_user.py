@@ -11,7 +11,6 @@ from daftar_common.http_response import HttpResponse
 from pydantic import BaseModel, Field, EmailStr, ValidationError
 
 
-
 class UserSignup(BaseModel):
     id: uuid.UUID = Field(default_factory=uuid.uuid4)
     pseudo: str
@@ -39,7 +38,6 @@ def create_user(event, cognito_provider, users_table):
         user_signup = UserSignup(**payload)
     except ValidationError as err:
         return HttpResponse.bad_request(error=err.errors())
-    password = user_signup.password
 
     user = User(**user_signup.model_dump(exclude=('password')))
 
@@ -70,4 +68,4 @@ def create_user(event, cognito_provider, users_table):
     except Exception as e:
         return HttpResponse.internal_error(error=f"Internal Server Error : {e}")
 
-    return HttpResponse.success(response_data=user_signup.model_dump(mode='json'))
+    return HttpResponse.success(response_data=user.model_dump(mode='json'))

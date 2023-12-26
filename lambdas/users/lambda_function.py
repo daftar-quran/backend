@@ -60,13 +60,12 @@ def lambda_handler(event, context):
             except Exception as e:
                 return HttpResponse.internal_error(error=f"Internal Server Error : {e}")
 
-        if resource == "/users/me":
+        if resource == "/me":
             try:
                 result = get_me(users_table, cognito_provider, access_token)
             except Exception as e:
                 return HttpResponse.internal_error(error=f"Internal Server Error : {e}")
            
-
     if operation == "DELETE":
         id_user = path_parameters.get('id')
         

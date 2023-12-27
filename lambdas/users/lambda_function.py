@@ -18,9 +18,9 @@ dynamodb = boto3.resource("dynamodb")
 cognito_client = boto3.client('cognito-idp')
 
 cognito_provider = CognitoIdentityProviderWrapper(
-    cognito_idp_client=cognito_client, 
-    user_pool_id="eu-west-1_p7iXXgN8f", 
-    client_id="rvkim25uu2nbvo5prfuucmfn5")
+    cognito_idp_client=cognito_client,
+    user_pool_id=os.environ["COGNITO_USER_POOL"],  
+    client_id=os.environ["COGNITO_CLIENT_ID"])
 
 users_table_name = os.environ["DYNAMODB_USERS_TABLE_NAME"]
 users_table = TableManager(dynamodb, table_name=users_table_name)

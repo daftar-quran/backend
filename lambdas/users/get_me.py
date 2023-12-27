@@ -21,7 +21,10 @@ def get_me(users_table, access_token):
     """
     # TODO: Replace scan by get_item
     all_users = users_table.scan_table()
-    user = next(filter(lambda u: u.get('pseudo').lower() == username, all_users))
+    try:
+        user = next(filter(lambda u: u.get('pseudo').lower() == username, all_users))
+    except Exception:
+        return HttpResponse.not_found(error="User not found.")
 
     user = User(**user)
 

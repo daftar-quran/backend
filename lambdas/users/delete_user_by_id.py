@@ -3,10 +3,10 @@ from daftar_common.http_response import HttpResponse
 from daftar_common.models.users import User
 
 
-def delete_user_by_id(users_table, cognito_client, id_user):
+def delete_user_by_id(users_table, cognito_client, user_id):
 
     # TODO: Check that user is admin (= has permissions to remove a user)
-    result = users_table.get_item_by_id(id_user)
+    result = users_table.get_item_by_id(user_id)
     if not result:
         return HttpResponse.not_found(error="User not found")
 
@@ -23,7 +23,7 @@ def delete_user_by_id(users_table, cognito_client, id_user):
 
     # Delete on DB
     try:
-        users_table.delete_item_by_id(id_user)
+        users_table.delete_item_by_id(user_id)
     except ValidationError as e:
         return HttpResponse.internal_error(error=f"Unknown error : {e}")
 

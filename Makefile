@@ -1,4 +1,4 @@
-dir=source
+dir=lambdas
 VENV=venv
 PYTHON_VERSION=3
 PRECOMMIT=$(VENV)/bin/pre-commit
@@ -18,6 +18,8 @@ install-dev:
 
 install:
 	$(PYTHON) -m pip install -r requirements.txt --no-cache-dir
+	$(PYTHON) -m pip install boto3
+	
 
 
 ## linters

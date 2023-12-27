@@ -1,1 +1,3 @@
-marshmallow==3.20.1
+pydantic[email]==2.5.2
+pyjwt==2.8.0
+git+https://github.com/daftar-quran/daftar_source.git

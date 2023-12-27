@@ -1,6 +1,6 @@
-from pydantic import ValidationError
 from daftar_common.http_response import HttpResponse
 from daftar_common.models.users import User
+from pydantic import ValidationError
 
 
 def delete_user_by_id(users_table, cognito_client, user_id):

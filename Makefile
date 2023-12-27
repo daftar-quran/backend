@@ -18,6 +18,8 @@ install-dev:
 
 install:
 	$(PYTHON) -m pip install -r requirements.txt --no-cache-dir
+	$(PYTHON) -m pip install boto3
+	
 
 
 ## linters

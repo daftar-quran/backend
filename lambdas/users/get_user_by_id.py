@@ -3,9 +3,9 @@ from daftar_common.http_response import HttpResponse
 from daftar_common.models.users import User
 
 
-def get_user_by_id(users_table, id_user):
+def get_user_by_id(users_table, user_id):
     
-    result = users_table.get_item_by_id(id_user)
+    result = users_table.get_item_by_id(user_id)
     if not result:
         return HttpResponse.not_found(error="User not found")
 

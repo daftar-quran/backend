@@ -1,4 +1,3 @@
-import json
 import os
 import boto3
 import logging
@@ -12,6 +11,7 @@ from delete_user_by_id import delete_user_by_id
 from get_users import get_users
 from get_me import get_me
 from daftar_common.cognito_idp import CognitoIdentityProviderWrapper
+from update_user_by_id import update_user_by_id
 
 # Initialisation du client DynamoDB
 dynamodb = boto3.resource("dynamodb")
@@ -28,19 +28,18 @@ users_table = TableManager(dynamodb, table_name=users_table_name)
 logger = logging.getLogger(__name__)
 
 
-
-
 def lambda_handler(event, context):
     operation = event["httpMethod"]
-    endpoint = event.get("resource")
+
     path_parameters = event.get("pathParameters")
-    headers = event.get("headers")
+    # headers = event.get("headers")
     resource = event.get("resource")
 
     access_token = event.get('headers', {}).get('Authorization')
 
+    result = HttpResponse.not_found(error="Method Not found")
+
     if operation == "POST":
-        
         try:
             result = create_user(event, cognito_provider, users_table)
         except Exception as e:
@@ -48,9 +47,9 @@ def lambda_handler(event, context):
 
     if operation == "GET":
         if resource == "/users/{id+}":
-            id_user = path_parameters.get('id')
+            user_id = path_parameters.get('id')
             try:
-                result = get_user_by_id(users_table, id_user)
+                result = get_user_by_id(users_table, user_id)
             except Exception as e:
                 return HttpResponse.internal_error(error=f"Internal Server Error : {e}")
 
@@ -62,15 +61,23 @@ def lambda_handler(event, context):
 
         if resource == "/me":
             try:
-                result = get_me(users_table, cognito_provider, access_token)
+                result = get_me(users_table, access_token)
             except Exception as e:
                 return HttpResponse.internal_error(error=f"Internal Server Error : {e}")
            
     if operation == "DELETE":
-        id_user = path_parameters.get('id')
+        user_id = path_parameters.get('id')
         
         try:
-            result = delete_user_by_id(users_table, cognito_provider, id_user)
+            result = delete_user_by_id(users_table, cognito_provider, user_id)
+        except Exception as e:
+            return HttpResponse.internal_error(error=f"Internal Server Error : {e}")
+
+    if operation == "PUT" and resource == "/users/{id+}":
+        user_id = path_parameters.get('id')
+
+        try:
+            result = update_user_by_id(users_table, user_id, event)
         except Exception as e:
             return HttpResponse.internal_error(error=f"Internal Server Error : {e}")
 

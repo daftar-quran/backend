@@ -80,5 +80,9 @@ def lambda_handler(event, context):
             result = update_user_by_id(users_table, user_id, event)
         except Exception as e:
             return HttpResponse.internal_error(error=f"Internal Server Error : {e}")
+    
+    if operation == "OPTIONS":
+        return HttpResponse.success(message="CORS Validated")
+
 
     return result

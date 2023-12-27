@@ -1,7 +1,6 @@
-from pydantic import ValidationError
-
 from daftar_common.http_response import HttpResponse
 from daftar_common.models.users import Users
+from pydantic import ValidationError
 
 
 def get_users(users_table):
@@ -11,4 +10,4 @@ def get_users(users_table):
         users = Users(users=result)
     except ValidationError as e:
         return HttpResponse.internal_error(error=f"Internal validation Error : {e}")
-    return HttpResponse.success(response_data=users.model_dump(mode='json'))
+    return HttpResponse.success(response_data=users.model_dump(mode="json"))

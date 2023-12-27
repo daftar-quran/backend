@@ -1,4 +1,4 @@
-dir=source
+dir=lambdas
 VENV=venv
 PYTHON_VERSION=3
 PRECOMMIT=$(VENV)/bin/pre-commit

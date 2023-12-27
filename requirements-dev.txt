@@ -6,4 +6,3 @@ pylint==2.15.9
 pytest==7.2.0
 safety==2.3.5
 python-dotenv==1.0.0
-daftar_common @ git+https://github.com/daftar-quran/daftar_source.git

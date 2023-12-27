@@ -1,7 +1,8 @@
 import json
 import uuid
-from daftar_common.models.users import User
+
 from daftar_common.http_response import HttpResponse
+from daftar_common.models.users import User
 from pydantic import ValidationError
 
 
@@ -35,13 +36,11 @@ def update_user_by_id(users_table, user_id, event):
 
     user.id = uuid.UUID(user_id)
     try:
-        updated = users_table.update_item_by_id(user_id, user.model_dump(mode='json'))
+        updated = users_table.update_item_by_id(user_id, user.model_dump(mode="json"))
     except Exception as e:
         return HttpResponse.internal_error(error=f"Unknown Error : {e}")
 
     if not updated:
         return HttpResponse.internal_error(error="Unknown Error")
 
-    return HttpResponse.success(response_data=user.model_dump(mode='json'))
-
-    
+    return HttpResponse.success(response_data=user.model_dump(mode="json"))

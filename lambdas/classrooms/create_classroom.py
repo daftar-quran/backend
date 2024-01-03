@@ -1,4 +1,6 @@
 import json
+import uuid
+from typing import List
 
 from daftar_common.http_response import HttpResponse
 from daftar_common.models.classrooms import Classroom
@@ -7,10 +9,11 @@ from pydantic import BaseModel, ValidationError
 
 class ClassroomCreation(BaseModel):
     name: str
-    tikrar_goal: str
+    tikrar_goal: int
+    admins: List[uuid.UUID]
 
 
-def create_classroom(event, classrooms_table):
+def create_classroom(event, users_table, classrooms_table):
 
     try:
         payload = None
@@ -28,6 +31,11 @@ def create_classroom(event, classrooms_table):
         return HttpResponse.bad_request(error=err.errors())
 
     classroom = Classroom(**classroom_init.model_dump())
+
+    for adm in classroom.admins:
+        result = users_table.get_item_by_id(str(adm))
+        if not result:
+            return HttpResponse.not_found(error=f"User {str(adm)} not found")
 
     try:
         classrooms_table.add_item(item=classroom.model_dump(mode="json"))

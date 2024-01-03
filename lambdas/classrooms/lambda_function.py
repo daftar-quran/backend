@@ -25,7 +25,9 @@ logger = logging.getLogger(__name__)
 def lambda_handler(event, context):
     operation = event["httpMethod"]
 
-    path_parameters = event.get("pathParameters")
+    path_parameters = event.get("pathParameters", {})
+    if not path_parameters:
+        path_parameters = {}
     # headers = event.get("headers")
     resource = event.get("resource")
 
@@ -66,7 +68,7 @@ def lambda_handler(event, context):
         except Exception as e:
             return HttpResponse.internal_error(error=f"Internal Server Error : {e}")
 
-    if operation == "PUT" and resource == "/classrooms/{id+}":
+    if operation == "PUT" and resource == "/classrooms/{id}":
         # No PUT operation
         pass
 

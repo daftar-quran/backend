@@ -46,7 +46,7 @@ def lambda_handler(event, context):
             return HttpResponse.internal_error(error=f"Internal Server Error : {e}")
 
     if operation == "GET":
-        if resource == "/users/{id+}":
+        if resource == "/users/{id}":
             user_id = path_parameters.get("id")
             try:
                 result = get_user_by_id(users_table, user_id)
@@ -73,16 +73,15 @@ def lambda_handler(event, context):
         except Exception as e:
             return HttpResponse.internal_error(error=f"Internal Server Error : {e}")
 
-    if operation == "PUT" and resource == "/users/{id+}":
+    if operation == "PUT" and resource == "/users/{id}":
         user_id = path_parameters.get("id")
 
         try:
             result = update_user_by_id(users_table, user_id, event)
         except Exception as e:
             return HttpResponse.internal_error(error=f"Internal Server Error : {e}")
-    
+
     if operation == "OPTIONS":
         return HttpResponse.success(message="CORS Validated")
-
 
     return result

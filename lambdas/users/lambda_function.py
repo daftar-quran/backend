@@ -19,8 +19,7 @@ cognito_client = boto3.client("cognito-idp")
 cognito_provider = CognitoIdentityProviderWrapper(
     cognito_idp_client=cognito_client,
     user_pool_id=os.environ["COGNITO_USER_POOL"],
-    client_id=os.environ["COGNITO_CLIENT_ID"],
-    client_secret=os.environ["COGNITO_CLIENT_SECRET"]
+    client_id=os.environ["COGNITO_CLIENT_ID"]
 )
 
 users_table_name = os.environ["DYNAMODB_USERS_TABLE_NAME"]

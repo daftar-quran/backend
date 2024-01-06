@@ -9,7 +9,6 @@ from pydantic import BaseModel, EmailStr, ValidationError
 
 
 class UserSignup(BaseModel):
-    pseudo: str
     firstname: str
     lastname: str
     email: EmailStr
@@ -43,7 +42,7 @@ def create_user(event, cognito_provider, users_table):
     resp_cognito = {}
     try:
         resp_cognito, already_exists = cognito_provider.sign_up_user(
-            user_name=user.pseudo, password=payload["password"], user_email=user.email
+            user_name=user.email, password=payload["password"], user_email=user.email
         )
     except Exception as e:
         return HttpResponse.internal_error(error=f"Internal Server Error : {e}")

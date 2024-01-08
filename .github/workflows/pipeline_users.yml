@@ -44,10 +44,6 @@ jobs:
 
       - name: Packaging artifact
         run: cd lambdas/users && zip -r ../../${{github.sha}}.zip .
-          
-#        with:
-#          files: lambdas/users venv/lib/*/site-packages
-#          dest: ./dist/${{github.sha}}.zip
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -63,3 +59,18 @@ jobs:
         run: |
           ls -al |
           aws s3 cp ${{github.sha}}.zip s3://daftar-dev-lambda-artifact-bucket/lambdas/users/${{github.sha}}.zip
+
+      - name: Deploy
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.DISPATCH_TOKEN }}
+          script: |
+            const data = {"artifact_daftar_users": "lambdas/users/${{github.sha}}.zip"}
+            const result = await github.rest.actions.createWorkflowDispatch({
+              owner: 'daftar-quran',
+              repo: 'terraform',
+              ref: 'v1.0',
+              workflow_id: 'terraform_service.yml',
+              inputs: data
+            })
+            console.log(data);
